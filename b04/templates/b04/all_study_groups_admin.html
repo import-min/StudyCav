@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}All Study Groups{% endblock %}</title>
+    <!-- load bootstrap module -->
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}">Project B04</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create_group' %}">Create a Study Group</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'calendar_view' %}">View Calendar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'study_group_list' %}">All Study Groups</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_page' %}">About</a>
+                    </li>
+                </ul>
+                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout_view' %}" style="color: white; background-color: transparent; border: 2px solid red; padding: 5px 10px;">
+                                Logout
+                                </a>
+                        </li>
+                     </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">All Study Groups</h1>
+
+                <h3 class="mt-4">Your Study Groups</h3>
+                <ul class="list-group">
+                    {% for membership in request.user.membership_set.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'study_group_details' membership.study_group.id %}">
+                                {{ membership.study_group.name }}
+                            </a>
+                            <form method="post" action="{% url 'delete_study_group' membership.study_group.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this study group?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">You are not in any study groups.</li>
+                    {% endfor %}
+        </div>
+                <h3 class="mt-4">All Study Groups</h3>
+                <ul class="list-group">
+                    {% for study_group in study_groups %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'study_group_details' study_group.id %}">{{ study_group.name }}</a>
+                            <form method="post" action="{% url 'delete_study_group' study_group.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this study group?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No study groups available.</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+    {% bootstrap_javascript %}
+    <!--Footer of Page-->
+    <footer class="bg-info text-white mt-4 py-3">
+        <div class="container text-center">
+            <p class="mb-0 small">This project is a class project.</p>
+            <p class="mb-0 small">The system is not monitored.</p>
+            <p class="mb-0 small">No real information should be submitted.</p>
+        </div>
+    </footer>
+</body>
+</html>

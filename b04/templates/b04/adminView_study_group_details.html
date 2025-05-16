@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ group.name }} - (Admin View)</title>
+  {% load bootstrap5 %} {% bootstrap_css %}
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'admin_dashboard' %}">Project B04</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" style="color: white; background-color: transparent; border: 2px solid red; padding: 5px 10px;">
+                                    Logout
+                                </a>
+                        </li>
+                     </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h1 class="mb-3">{{ group.name }} (Admin View)</h1>
+  <p><strong>Description:</strong> {{ group.description }}</p>
+  <p><strong>Date:</strong> {{ group.date }}</p>
+  <p><strong>Location:</strong> {{ group.location }}</p>
+  <br />
+
+  <!-- Admin Controls for Files -->
+  <div class="button-container">
+    <a href="{% url 'adminView_group_detail' group.id %}" class="btn btn-success">Manage Files</a>
+    <!-- Enter Chatroom Button -->
+        <a href="{% url 'adminView_chat_room_view' group.id %}" class="btn btn-primary"
+        >Enter Chatroom</a
+        >
+  </div>
+
+
+
+  <!-- Events Section -->
+  <h2 class="mt-4">Group Events</h2>
+  <ul class="list-group">
+    {% for event in events %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ event.title }}</strong><br />
+        {{ event.description }}<br />
+        From {{ event.start_time }} to {{ event.end_time }}
+      </div>
+      <!-- Delete Button -->
+      <form method="POST" action="{% url 'delete_event' study_group_id=group.id event_id=event.id %}" class="d-inline">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+  </form>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No events for this group.</li>
+    {% endfor %}
+  </ul>
+
+  <!-- Members Section -->
+  <h2 class="mt-4">Members</h2>
+  <ul class="list-group">
+    {% for membership in members %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>{{ membership.user.username }}</span>
+      <!-- Remove button for admins -->
+      <form method="POST" action="{% url 'remove_member' study_group_id=group.id member_id=membership.id %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+      </form>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No members have joined this group yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+<div class="mt-3 text-center">
+  <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Back to Admin Dashboard</a>
+</div>
+{% bootstrap_javascript %}
+    <!--Footer of Page-->
+    <footer class="bg-info text-white mt-4 py-3">
+        <div class="container text-center">
+            <p class="mb-0 small">This project is a class project.</p>
+            <p class="mb-0 small">The system is not monitored.</p>
+            <p class="mb-0 small">No real information should be submitted.</p>
+        </div>
+    </footer>
+</body>
+</html>

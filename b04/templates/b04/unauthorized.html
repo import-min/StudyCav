@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Access Denied{% endblock %}</title>
+    <!-- Load Bootstrap -->
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1 class="card-title">Access Denied</h1>
+                <p class="card-text">You do not have permission to perform this action.</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+
+    {% bootstrap_javascript %}
+</body>
+</html>

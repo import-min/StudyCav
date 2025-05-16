@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home Page{% endblock %}</title>
+    <!-- Load Bootstrap module -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+
+</head>
+<body>
+    <div class="container">
+        <div class="card mt-4">
+            <div class="card-body">
+                <h1 class="card-title">Welcome to the Homepage</h1>
+
+                <!-- Single Login Button -->
+                <button class="btn btn-primary btn-block mt-3" 
+                        onclick="window.location.href='/check_and_login'">
+                    Login with Google
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    {% bootstrap_javascript %}
+
+    <!-- Anonymous User can browse -->
+    <!-- List of Study Groups with Delete Functionality -->
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>
+                            <th>Owner of Group</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in study_groups %}
+                        <tr>
+                            <td>
+                                <a>{{ group.name }}</a>
+                            </td>
+                            <td>
+                                <a>{{ group.user }}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+    <div>
+
+    </div>
+ <!--Footer of Page-->
+    <footer class="bg-info text-white mt-4 py-3">
+        <div class="container text-center">
+            <p class="mb-0 small">This project is a class project.</p>
+            <p class="mb-0 small">The system is not monitored.</p>
+            <p class="mb-0 small">No real information should be submitted.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{% endblock %}</title>
+    <!-- Include Bootstrap 5 CSS -->
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% block extra_head %}
+    {% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">Project B04</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_email' %}">{% trans "Change Email" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Display Messages -->
+        {% if messages %}
+        <div class="alert alert-info" role="alert">
+            <strong>{% trans "Messages:" %}</strong>
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Content Section -->
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block extra_body %}
+    {% endblock %}
+
+    <!-- Include Bootstrap 5 JavaScript -->
+    {% bootstrap_javascript %}
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends "socialaccount/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if process == "connect" %}
+    <h1 class="text-center custom-heading">{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+
+    <p class="lead text-center custom-paragraph">
+        {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+    </p>
+    {% else %}
+    <h1 class="text-center custom-heading">{% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}</h1>
+
+    <p class="lead text-center custom-paragraph">
+        {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+    </p>
+    {% endif %}
+
+    <div class="d-flex justify-content-center mt-4">
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg custom-button">{% trans "Continue" %}</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .custom-heading {
+        color: #343a40;  /* Dark text color */
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    .custom-paragraph {
+        font-size: 1.2rem;
+        color: #6c757d;  /* Lighter text color */
+    }
+
+    .custom-button {
+        background-color: #28a745;  /* Green button */
+        border-color: #28a745;
+    }
+
+    .custom-button:hover {
+        background-color: #218838;  /* Darker green on hover */
+        border-color: #1e7e34;
+    }
+</style>
+{% endblock %}

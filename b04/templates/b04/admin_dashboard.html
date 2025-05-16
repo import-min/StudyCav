@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}">Project B04</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" style="color: white; background-color: transparent; border: 2px solid red; padding: 5px 10px;">
+                                    Logout
+                                </a>
+                        </li>
+                     </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard Content -->
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Admin Dashboard</h1>
+                <p class="card-text">Welcome to the admin-only section.</p>
+
+                <h2>Welcome, {{ first_name }} {{ last_name }}!</h2>
+                <p>Account Name: <strong>{{ account_name }}</strong></p>
+
+                <!-- Manage Study Groups Section -->
+                <h3 class="mt-4">Manage Study Groups</h3>
+                <p>Here you can view and manage all study groups in the system.</p>
+
+                <!-- List of Study Groups with Delete Functionality -->
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in study_groups %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'adminView_study_group_details' group.id %}">{{ group.name }}</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'delete_study_group' group.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Display Messages -->
+                {% if messages %}
+                    <ul class="list-group mt-3">
+                        {% for message in messages %}
+                            <li class="list-group-item{% if message.tags %} list-group-item-{{ message.tags }}{% endif %}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% bootstrap_javascript %}
+    <!--Footer of Page-->
+    <footer class="bg-info text-white mt-4 py-3">
+        <div class="container text-center">
+            <p class="mb-0 small">This project is a class project.</p>
+            <p class="mb-0 small">The system is not monitored.</p>
+            <p class="mb-0 small">No real information should be submitted.</p>
+        </div>
+    </footer>
+</body>
+</html>

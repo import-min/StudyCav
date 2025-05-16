@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/common-dashboard">Project B04</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create_group' %}">Create a Study Group</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'calendar_view' %}">View Calendar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'study_group_list' %}">All Study Groups</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_page' %}">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-danger text-white" href="{% url 'logout_view' %}">
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h1 class="text-center text-primary mb-4">Create Event</h1>
+        <form method="POST" class="shadow-lg p-4 rounded bg-light">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title" class="font-weight-bold">Event Title</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="description" class="font-weight-bold">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="start_time" class="font-weight-bold">Start Time</label>
+                <input type="datetime-local" id="start_time" name="start_time" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="end_time" class="font-weight-bold">End Time</label>
+                <input type="datetime-local" id="end_time" name="end_time" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="study_group" class="font-weight-bold">Study Group</label>
+                <select id="study_group" name="study_group" class="form-control" required>
+                    {% if study_groups %}
+                        {% for group in study_groups %}
+                            <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option disabled>No study groups available</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location" class="font-weight-bold">Location</label>
+                <select id="location" name="location" class="form-control" required>
+                    <option value="">Select a location</option>
+                    <option value="Alderman Library">Alderman Library</option>
+                    <option value="Clemons Library">Clemons Library</option>
+                    <option value="Brown Science & Engineering Library">Brown Science & Engineering Library</option>
+                    <option value="Robertson Media Center">Robertson Media Center</option>
+                    <option value="McGregor Room">McGregor Room (The Harry Potter Room)</option>
+                    <option value="Nau Hall Study Lounge">Nau Hall Study Lounge</option>
+                    <option value="Newcomb Hall">Newcomb Hall</option>
+                    <option value="The Corner">The Corner</option>
+                    <option value="Thornton Hall Study Lounge">Thornton Hall Study Lounge</option>
+                    <option value="Engineering Library">Engineering Library</option>
+                    <option value="1515 University Avenue">1515 University Avenue (The Student Center)</option>
+                    <option value="UVA Bookstore">UVA Bookstore</option>
+                    <option value="Slaughter Recreation Center Study Room">Slaughter Recreation Center Study Room</option>
+                    <option value="Rice Hall Atrium">Rice Hall Atrium</option>
+                    <option value="O'Hill Dining Study Lounge">O'Hill Dining Study Lounge</option>
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Create Event</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-info text-white mt-4 py-3">
+        <div class="container text-center small">
+            <p class="mb-0">This project is a class project.</p>
+            <p class="mb-0">The system is not monitored.</p>
+            <p class="mb-0">No real information should be submitted.</p>
+        </div>
+    </footer>
+
+    {% bootstrap_javascript %}
+</body>
+</html>

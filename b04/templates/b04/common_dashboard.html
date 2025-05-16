@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common User Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/common-dashboard">Project B04</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_group' %}">Create a Study Group</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'calendar_view' %}">View Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'study_group_list' %}">All Study Groups</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_page' %}">About</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout_view' %}" style="color: white; background-color: transparent; border: 2px solid red; padding: 5px 10px;">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Common User Dashboard</h1>
+            <p class="card-text">Welcome to the common user section.</p>
+
+            <h2>Welcome, {{ first_name }} {{ last_name }}!</h2>
+            <p>Account Name: <strong>{{ account_name }}</strong></p>
+            <p>Email: <strong>{{ request.user.email }}</strong></p>
+            <p>Date Joined: <strong>{{ request.user.date_joined|date:"F d, Y" }}</strong></p> 
+
+            <h3 class="mt-4">Your Study Groups</h3>
+            <ul class="list-group">
+                {% for membership in request.user.membership_set.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{% url 'study_group_details' membership.study_group.id %}">{{ membership.study_group.name }}</a>
+                        <form method="POST" action="{% url 'leave_group' membership.study_group.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Leave Group</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">You are not in any study groups.</li>
+                {% endfor %}
+            </ul>
+
+        <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+
+            <h3 class="mt-4">Upcoming Events</h3>
+            <ul class="list-group">
+                {% for event in upcoming_events %}
+                    <li class="list-group-item">
+                        <strong>{{ event.title }}</strong><br>
+                        <small>Location: {{ event.location }}</small><br>
+                        <small>Starts in: {{ event.countdown }} days</small><br>
+                        <small>Start Time: {{ event.start_time|date:"D, M d Y H:i" }}</small>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No upcoming events found.</li>
+                {% endfor %}
+            </ul>
+
+            <h3 class="mt-4">Pending Join Requests for Your Groups</h3>
+            <ul class="list-group">
+                {% for request in pending_requests %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>{{ request.user.username }} has requested to join "{{ request.study_group.name }}"</div>
+                        <div>
+                            <form method="post" action="{% url 'accept_join_request' request.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form method="post" action="{% url 'reject_join_request' request.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No pending requests for your groups.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% bootstrap_javascript %}
+<footer class="bg-info text-white mt-4 py-3">
+    <div class="container text-center">
+        <p class="mb-0 small">This project is a class project.</p>
+        <p class="mb-0 small">The system is not monitored.</p>
+        <p class="mb-0 small">No real information should be submitted.</p>
+    </div>
+</footer>
+</body>
+</html>
+

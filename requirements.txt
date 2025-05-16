@@ -1,0 +1,15 @@
+asgiref==3.8.1
+Django== 4.2.16
+gunicorn==23.0.0
+packaging==24.1
+sqlparse==0.5.1
+whitenoise==6.7.0
+django-allauth==0.55.0
+dj-database-url==1.0.0
+django-bootstrap5==24.3
+django-bootstrap-v5 == 1.0.11
+psycopg2-binary==2.9.6
+python-decouple==3.8
+django-storages==1.13.2
+boto3==1.28.5
+botocore==1.31.5

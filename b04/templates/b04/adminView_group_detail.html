@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{{ study_group.name }} - Files (Admin View){% endblock %}</title>
+    <!-- Load Bootstrap module -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'admin_dashboard' %}">Project B04</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" style="color: white; background-color: transparent; border: 2px solid red; padding: 5px 10px;">
+                                    Logout
+                                </a>
+                        </li>
+                     </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mt-4">
+      <h1 class="text-center mb-4">{{ study_group.name }} - Files (Admin View)</h1>
+
+      {% if documents %}
+      <div class="d-flex flex-wrap gap-4 justify-content-start">
+        {% for document in documents %}
+        <div class="card shadow-sm" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a
+                href="{{ document.upload.url }}"
+                target="_blank"
+                class="text-decoration-none"
+                >{{ document.title }}</a
+              >
+            </h5>
+            <p class="card-text"><strong>Uploaded by:</strong> {{ document.user.username }}</p>
+            <p class="card-text"><strong>Description:</strong> {{ document.description }}</p>
+            <p class="card-text"><strong>Uploaded at:</strong> {{ document.upload_at|date:"F j, Y, g:i a" }}</p>
+            <p class="card-text">
+              <strong>Keywords:</strong>
+              {% for keyword in document.keywords.all %}
+              <span>{{ keyword.name }}</span>{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </p>
+
+            <!-- Admin-only Delete Button -->
+            <div class="d-flex justify-content-center mt-3">
+              <a
+                href="{% url 'adminView_delete_document' group_id=document.study_group.id document_id=document.id %}"
+                class="btn btn-danger btn-sm"
+                >Delete</a
+              >
+            </div>
+          </div>
+          <iframe
+            src="{{ document.upload.url }}"
+            class="border-top"
+            width="100%"
+            height="200"
+            style="border: none;"
+          ></iframe>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-center">No files uploaded yet.</p>
+      {% endif %}
+
+      <div class="mt-3 text-center">
+        <a href="{% url 'adminView_study_group_details' study_group.id %}" class="btn btn-secondary">
+          Back to Study Group Details
+        </a>
+      </div>
+    </div>
+
+    {% bootstrap_javascript %}
+      <!--Footer of Page-->
+    <footer class="bg-info text-white mt-4 py-3">
+        <div class="container text-center">
+            <p class="mb-0 small">This project is a class project.</p>
+            <p class="mb-0 small">The system is not monitored.</p>
+            <p class="mb-0 small">No real information should be submitted.</p>
+        </div>
+    </footer>
+  </body>
+</html>
